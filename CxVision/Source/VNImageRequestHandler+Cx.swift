@@ -72,7 +72,9 @@ public extension VNImageRequestHandler {
   ///
   /// The number of `VNRecognizedTextObservation`s is closely related to the number of lines of text contained in the image.
   func textRecognitionPublisher(with configuration: VNRecognizeTextRequestConfiguration? = nil) -> AnyPublisher<[VNRecognizedTextObservation], Error> {
-    Future { [weak self] resultFn in
+    var requests = [VNRequest]()
+    
+    let recognizeTextFuture = Future<[VNRecognizedTextObservation], Error> { resultFn in
       let recognizeTextRequest = VNRecognizeTextRequest { (request, error) in
         if let error = error { return resultFn(.failure(error)) }
         
@@ -84,13 +86,42 @@ public extension VNImageRequestHandler {
       }
   
       recognizeTextRequest.configure(configuration ?? VNRecognizeTextRequestConfiguration())
-      
-      do {
-        try self?.perform([recognizeTextRequest])
-      } catch {
-        return resultFn(.failure(error))
-      }
+      requests.append(recognizeTextRequest)
     }
-    .eraseToAnyPublisher()
+      
+    let performPublisher = Publishers.Once<(), Error>(Result { try self.perform(requests) })
+      
+    return performPublisher
+      .combineLatest(recognizeTextFuture)
+      .map { _, results in results }
+      .eraseToAnyPublisher()
+  }
+
+  func multipleRequestPublisher(_ requestTypes: [VNRequest.Type]) -> AnyPublisher<[VNObservation], Error> {
+    var requests = [VNRequest]()
+    
+    let manyFutures = Publishers.MergeMany<Future<[VNObservation], Error>>(
+      requestTypes.map { requestType -> Future<[VNObservation], Error> in
+        Future { resultFn in
+          let request = requestType.init { request, error in
+            if let error = error { return resultFn(.failure(error)) }
+            
+            guard let results = request.results as? [VNObservation] else {
+              return resultFn(.failure(VisionError.unexpectedResultType))
+            }
+            
+            return resultFn(.success(results))
+          }
+          requests.append(request)
+        }
+      }
+    )
+      
+    let performPublisher = Publishers.Once<(), Error>(Result { try self.perform(requests) })
+    
+    return performPublisher
+      .combineLatest(manyFutures)
+      .map { _, results in results }
+      .eraseToAnyPublisher()
   }
 }

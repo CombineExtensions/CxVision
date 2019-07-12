@@ -13,6 +13,7 @@
 		6202D66B22D1AEF6002F7F50 /* CxVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6202D65322D1ABE6002F7F50 /* CxVision.framework */; };
 		6202D67222D1AFD3002F7F50 /* image_sample.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6202D67122D1AFD3002F7F50 /* image_sample.jpg */; };
 		6202D67522D1B708002F7F50 /* Lenore3.png in Resources */ = {isa = PBXBuildFile; fileRef = 6202D67422D1B708002F7F50 /* Lenore3.png */; };
+		62E2BE4922D824BC00415544 /* cardImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 62E2BE4822D824BC00415544 /* cardImage.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		6202D66A22D1AEF6002F7F50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6202D67122D1AFD3002F7F50 /* image_sample.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_sample.jpg; sourceTree = "<group>"; };
 		6202D67422D1B708002F7F50 /* Lenore3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lenore3.png; sourceTree = "<group>"; };
+		62E2BE4822D824BC00415544 /* cardImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardImage.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			children = (
 				6202D67422D1B708002F7F50 /* Lenore3.png */,
 				6202D67122D1AFD3002F7F50 /* image_sample.jpg */,
+				62E2BE4822D824BC00415544 /* cardImage.png */,
 				6202D66822D1AEF6002F7F50 /* CxVisionTests.swift */,
 				6202D66A22D1AEF6002F7F50 /* Info.plist */,
 			);
@@ -205,6 +208,7 @@
 			files = (
 				6202D67522D1B708002F7F50 /* Lenore3.png in Resources */,
 				6202D67222D1AFD3002F7F50 /* image_sample.jpg in Resources */,
+				62E2BE4922D824BC00415544 /* cardImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

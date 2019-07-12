@@ -62,6 +62,21 @@ class CxVisionTests: XCTestCase {
     
     wait(for: [expectation], timeout: 10)
   }
+  
+  func testMultipleRequestPublisher_emitsMultipleValues() {
+    let expectation = XCTestExpectation(description: "MultipleObservationsExpectation")
+   
+    _ = VNImageRequestHandler(data: getImage(named: "cardImage.png").pngData()!, options: [:])
+      .multipleRequestPublisher([VNDetectRectanglesRequest.self, VNDetectBarcodesRequest.self, VNDetectTextRectanglesRequest.self, VNRecognizeTextRequest.self])
+      .count()
+      .assertNoFailure()
+      .sink { int in
+        XCTAssertEqual(int, 4)
+        expectation.fulfill()
+      }
+    
+    wait(for: [expectation], timeout: 20)
+  }
 }
 
 extension XCTestCase {
