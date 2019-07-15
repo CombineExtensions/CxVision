@@ -23,7 +23,7 @@ class CxVisionTests: XCTestCase {
   func testRequestHandler_publishesObservations_whenSubscribed() {
     let expectation = XCTestExpectation(description: "ObservationExpectation")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
-      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
+      .publisher(for: SimpleConfiguration<VNRecognizeTextRequest> { request in request.recognitionLevel = .fast })
       .sink { _ in
         expectation.fulfill()
       }
@@ -35,14 +35,14 @@ class CxVisionTests: XCTestCase {
     let oneLine = XCTestExpectation(description: "One line")
     let elevenLines = XCTestExpectation(description: "Eleven lines")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
-      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
+      .publisher(for: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { request in request.recognitionLevel = .fast })
       .sink { observations in
         XCTAssertEqual(observations.count, 1)
         oneLine.fulfill()
       }
     
     _ = VNImageRequestHandler(data: getImage(named: "Lenore3.png").pngData()!, options: [:])
-      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
+      .publisher(for: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { request in request.recognitionLevel = .fast } )
       .sink { observations in
         XCTAssertEqual(observations.count, 11)
         elevenLines.fulfill()
@@ -54,7 +54,7 @@ class CxVisionTests: XCTestCase {
   func testRequestHandlerObservationResult_contains1234567890_whenImageHasThatText() {
     let expectation = XCTestExpectation(description: "ObservationExpectation")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
-      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
+      .publisher(for: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { request in request.recognitionLevel = .fast } )
       .sink { observations in
         XCTAssertEqual(observations.first!.topCandidates(1).first!.string.trimmingCharacters(in: .whitespacesAndNewlines), "1234567890")
         expectation.fulfill()
@@ -67,7 +67,7 @@ class CxVisionTests: XCTestCase {
     let expectation = XCTestExpectation(description: "MultipleObservationsExpectation")
    
     _ = VNImageRequestHandler(data: getImage(named: "cardImage.png").pngData()!, options: [:])
-      .multipleRequestPublisher([VNDetectRectanglesRequest.self, VNDetectBarcodesRequest.self, VNDetectTextRectanglesRequest.self, VNRecognizeTextRequest.self])
+      .publisher(for: [VNDetectRectanglesRequest.self, VNDetectBarcodesRequest.self, VNDetectTextRectanglesRequest.self, VNRecognizeTextRequest.self])
       .count()
       .assertNoFailure()
       .sink { int in
