@@ -23,11 +23,11 @@ class CxVisionTests: XCTestCase {
   func testRequestHandler_publishesObservations_whenSubscribed() {
     let expectation = XCTestExpectation(description: "ObservationExpectation")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
-      .textRecognitionPublisher()
+      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
       .sink { _ in
         expectation.fulfill()
-    }
-    
+      }
+
     wait(for: [expectation], timeout: 10)
   }
   
@@ -35,18 +35,18 @@ class CxVisionTests: XCTestCase {
     let oneLine = XCTestExpectation(description: "One line")
     let elevenLines = XCTestExpectation(description: "Eleven lines")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
-      .textRecognitionPublisher()
+      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
       .sink { observations in
         XCTAssertEqual(observations.count, 1)
         oneLine.fulfill()
-    }
+      }
     
     _ = VNImageRequestHandler(data: getImage(named: "Lenore3.png").pngData()!, options: [:])
-      .textRecognitionPublisher()
+      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
       .sink { observations in
         XCTAssertEqual(observations.count, 11)
         elevenLines.fulfill()
-    }
+      }
     
     wait(for: [oneLine, elevenLines], timeout: 10)
   }
@@ -54,7 +54,7 @@ class CxVisionTests: XCTestCase {
   func testRequestHandlerObservationResult_contains1234567890_whenImageHasThatText() {
     let expectation = XCTestExpectation(description: "ObservationExpectation")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
-      .textRecognitionPublisher()
+      .publisher(with: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { _ in })
       .sink { observations in
         XCTAssertEqual(observations.first!.topCandidates(1).first!.string.trimmingCharacters(in: .whitespacesAndNewlines), "1234567890")
         expectation.fulfill()

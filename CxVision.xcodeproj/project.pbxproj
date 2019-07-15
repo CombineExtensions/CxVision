@@ -14,6 +14,7 @@
 		6202D67222D1AFD3002F7F50 /* image_sample.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6202D67122D1AFD3002F7F50 /* image_sample.jpg */; };
 		6202D67522D1B708002F7F50 /* Lenore3.png in Resources */ = {isa = PBXBuildFile; fileRef = 6202D67422D1B708002F7F50 /* Lenore3.png */; };
 		62E2BE4922D824BC00415544 /* cardImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 62E2BE4822D824BC00415544 /* cardImage.png */; };
+		62E2BE5322DC1F8300415544 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E2BE5222DC1F8300415544 /* Configuration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		6202D67122D1AFD3002F7F50 /* image_sample.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_sample.jpg; sourceTree = "<group>"; };
 		6202D67422D1B708002F7F50 /* Lenore3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lenore3.png; sourceTree = "<group>"; };
 		62E2BE4822D824BC00415544 /* cardImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardImage.png; sourceTree = "<group>"; };
+		62E2BE5222DC1F8300415544 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				6202D66022D1ACD4002F7F50 /* VNImageRequestHandler+Cx.swift */,
+				62E2BE5222DC1F8300415544 /* Configuration.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62E2BE5322DC1F8300415544 /* Configuration.swift in Sources */,
 				6202D66122D1ACD4002F7F50 /* VNImageRequestHandler+Cx.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
