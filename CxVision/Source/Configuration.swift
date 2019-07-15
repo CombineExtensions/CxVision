@@ -14,6 +14,7 @@ import Vision
 /// to return a publisher that emits the expected VNObservation subclass. If you prefer to typecast at the callsite, a `SimpleConfiguration<A: VNRequest>`
 /// typealias is provided
 public struct Configuration<A: VNRequest, B: VNObservation> {
+  let type = A.self
   let configure: (inout A) -> ()
   
   /// Configuration initializer
@@ -145,4 +146,25 @@ public extension Configuration where A: VNTargetedImageRequest {
       configuration(&request)
     }
   }
+}
+
+enum Configurations {
+  case classifyImage(Configuration<VNClassifyImageRequest, VNObservation>)
+  case generateImageFeaturePrint(Configuration<VNGenerateImageFeaturePrintRequest, VNObservation>)
+  case generateAttentionBasedSaliency(Configuration<VNGenerateAttentionBasedSaliencyImageRequest, VNObservation>)
+  case generateObjectnessBasedSaliency(Configuration<VNGenerateObjectnessBasedSaliencyImageRequest, VNObservation>)
+  case trackRectangle(Configuration<VNTrackRectangleRequest, VNObservation>)
+  case trackObject(Configuration<VNTrackRectangleRequest, VNObservation>)
+  case detectRectangles(Configuration<VNDetectRectanglesRequest, VNObservation>)
+  case detectFaceRectangles(Configuration<VNDetectFaceRectanglesRequest, VNObservation>)
+  case detectFaceLandmarks(Configuration<VNDetectFaceLandmarksRequest, VNObservation>)
+  case detectBarcodes(Configuration<VNDetectBarcodesRequest, VNObservation>)
+  case detectAnimalRectangles(Configuration<VNDetectAnimalRectanglesRequest, VNObservation>)
+  case detectHumanRectangles(Configuration<VNDetectHumanRectanglesRequest, VNObservation>)
+  case recognizeText(Configuration<VNRecognizeTextRequest, VNObservation>)
+  case detectTextRectangles(Configuration<VNDetectTextRectanglesRequest, VNObservation>)
+  case detectHorizon(Configuration<VNDetectHorizonRequest, VNObservation>)
+  case translationalImageRegistration(Configuration<VNTranslationalImageRegistrationRequest, VNObservation>)
+  case homographicImageRegistration(Configuration<VNHomographicImageRegistrationRequest, VNObservation>)
+  case coreML(Configuration<VNCoreMLRequest, VNObservation>)
 }
