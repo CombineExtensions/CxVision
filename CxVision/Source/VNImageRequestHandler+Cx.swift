@@ -15,7 +15,7 @@ enum VisionError: Error {
 
 public extension VNImageRequestHandler {
   /// Creates a publisher based on the provided Configuration
-  /// - Parameter configuration: Configuration<A: VNRequest, B: VNObservation>. Default implementation provided in cases where the publisher is assigned directly.
+  /// - Parameter configuration: Configuration<A: VNRequest, B: VNObservation>. 
   func publisher<Request: VNRequest, Observation: VNObservation>(for configuration: Configuration<Request, Observation>) -> AnyPublisher<[Observation], Error> {
     var requests = [VNRequest]()
     
@@ -34,7 +34,7 @@ public extension VNImageRequestHandler {
       requests.append(visionRequest)
     }
     
-    let performPublisher = Future { resultFn in resultFn(Result { try self.perform(requests) }) }
+    let performPublisher = Future { promise in promise(Result { try self.perform(requests) }) }
     
     return performPublisher
       .combineLatest(visionFuture)
@@ -67,7 +67,7 @@ public extension VNImageRequestHandler {
       }
     )
       
-    let performPublisher = Publishers.Once<(), Error>(Result { try self.perform(requests) })
+    let performPublisher = Future { promise in promise(Result { try self.perform(requests) }) }
     
     return performPublisher
       .combineLatest(futures)

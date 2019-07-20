@@ -7,6 +7,7 @@
 //
 
 import Vision
+import CoreImage
 
 /// A struct for holding onto a configuration function to be applied to a `VNRequest`
 ///

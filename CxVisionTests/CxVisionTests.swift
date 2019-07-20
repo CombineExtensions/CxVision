@@ -24,6 +24,7 @@ class CxVisionTests: XCTestCase {
     let expectation = XCTestExpectation(description: "ObservationExpectation")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
       .publisher(for: SimpleConfiguration<VNRecognizeTextRequest> { request in request.recognitionLevel = .fast })
+      .assertNoFailure()
       .sink { _ in
         expectation.fulfill()
       }
@@ -36,6 +37,7 @@ class CxVisionTests: XCTestCase {
     let elevenLines = XCTestExpectation(description: "Eleven lines")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
       .publisher(for: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { request in request.recognitionLevel = .fast })
+      .assertNoFailure()
       .sink { observations in
         XCTAssertEqual(observations.count, 1)
         oneLine.fulfill()
@@ -43,6 +45,7 @@ class CxVisionTests: XCTestCase {
     
     _ = VNImageRequestHandler(data: getImage(named: "Lenore3.png").pngData()!, options: [:])
       .publisher(for: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { request in request.recognitionLevel = .fast } )
+      .assertNoFailure()
       .sink { observations in
         XCTAssertEqual(observations.count, 11)
         elevenLines.fulfill()
@@ -55,10 +58,11 @@ class CxVisionTests: XCTestCase {
     let expectation = XCTestExpectation(description: "ObservationExpectation")
     _ = VNImageRequestHandler(data: getImage(named: "image_sample.jpg").pngData()!, options: [:])
       .publisher(for: Configuration<VNRecognizeTextRequest, VNRecognizedTextObservation> { request in request.recognitionLevel = .fast } )
+      .assertNoFailure()
       .sink { observations in
         XCTAssertEqual(observations.first!.topCandidates(1).first!.string.trimmingCharacters(in: .whitespacesAndNewlines), "1234567890")
         expectation.fulfill()
-    }
+      }
     
     wait(for: [expectation], timeout: 10)
   }
