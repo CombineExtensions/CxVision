@@ -14,8 +14,8 @@ import CoreImage
 /// The VNObservation type parameter is used for typecasting in the VNImageRequestHandler extension method `publisher(for:)`
 /// to return a publisher that emits the expected VNObservation subclass. If you prefer to typecast at the callsite, a `SimpleConfiguration<A: VNRequest>`
 /// typealias is provided
-public struct Configuration<A: VNRequest, B: VNObservation> {
-  let configure: (inout A) -> ()
+public struct Configuration<Request: VNRequest, Observation: VNObservation> {
+  let configure: (inout Request) -> ()
   
   /// Configuration initializer
   /// - Parameter configuration: The configuration function to apply the to VNRequest.
@@ -29,120 +29,120 @@ public struct Configuration<A: VNRequest, B: VNObservation> {
   ///   request.prefersBackgroundProcessing = true
   /// }
   /// ```
-  public init(_ configuration: @escaping (inout A) -> ()) {
+  public init(_ configuration: @escaping (inout Request) -> ()) {
     configure = configuration
   }
 }
 
-public typealias SimpleConfiguration<A: VNRequest> = Configuration<A, VNObservation>
+public typealias SimpleConfiguration<Request: VNRequest> = Configuration<Request, VNObservation>
 
-public extension Configuration where A == VNCoreMLRequest {
-  init(model: VNCoreMLModel, _ configuration: @escaping (inout A) -> ()) {
+public extension Configuration where Request == VNCoreMLRequest {
+  init(model: VNCoreMLModel, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(model: model, completionHandler: completionHandler)
+      request = Request(model: model, completionHandler: completionHandler)
       configuration(&request)
     }
   }
 }
 
-public extension Configuration where A == VNTrackRectangleRequest {
-  init(rectangleObservation: VNRectangleObservation, _ configuration: @escaping (inout A) -> ()) {
+public extension Configuration where Request == VNTrackRectangleRequest {
+  init(rectangleObservation: VNRectangleObservation, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(rectangleObservation: rectangleObservation, completionHandler: completionHandler)
+      request = Request(rectangleObservation: rectangleObservation, completionHandler: completionHandler)
       configuration(&request)
     }
   }
 }
 
-public extension Configuration where A == VNTrackObjectRequest {
-  init(detectedObjectObservation: VNDetectedObjectObservation, _ configuration: @escaping (inout A) -> ()) {
+public extension Configuration where Request == VNTrackObjectRequest {
+  init(detectedObjectObservation: VNDetectedObjectObservation, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(detectedObjectObservation: detectedObjectObservation, completionHandler: completionHandler)
+      request = Request(detectedObjectObservation: detectedObjectObservation, completionHandler: completionHandler)
       configuration(&request)
     }
   }
 }
 
-public extension Configuration where A: VNTargetedImageRequest {
-  init(targetedCGImage: CGImage, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout A) -> ()) {
+public extension Configuration where Request: VNTargetedImageRequest {
+  init(targetedCGImage: CGImage, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedCGImage: targetedCGImage, orientation: orientation, options: options, completionHandler: completionHandler)
+      request = Request(targetedCGImage: targetedCGImage, orientation: orientation, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedCGImage: CGImage, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout A) -> ()) {
+  init(targetedCGImage: CGImage, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedCGImage: targetedCGImage, options: options, completionHandler: completionHandler)
+      request = Request(targetedCGImage: targetedCGImage, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedCIImage: CIImage, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout A) -> ()) {
+  init(targetedCIImage: CIImage, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedCIImage: targetedCIImage, orientation: orientation, options: options, completionHandler: completionHandler)
+      request = Request(targetedCIImage: targetedCIImage, orientation: orientation, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedCIImage: CIImage, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout A) -> ()) {
+  init(targetedCIImage: CIImage, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedCIImage: targetedCIImage, options: options, completionHandler: completionHandler)
+      request = Request(targetedCIImage: targetedCIImage, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedCVPixelBuffer: CVPixelBuffer, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout A) -> ()) {
+  init(targetedCVPixelBuffer: CVPixelBuffer, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedCVPixelBuffer: targetedCVPixelBuffer, orientation: orientation, options: options, completionHandler: completionHandler)
+      request = Request(targetedCVPixelBuffer: targetedCVPixelBuffer, orientation: orientation, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedCVPixelBuffer: CVPixelBuffer, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout A) -> ()) {
+  init(targetedCVPixelBuffer: CVPixelBuffer, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedCVPixelBuffer: targetedCVPixelBuffer, options: options, completionHandler: completionHandler)
+      request = Request(targetedCVPixelBuffer: targetedCVPixelBuffer, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedImageData: Data, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout A) -> ()) {
+  init(targetedImageData: Data, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedImageData: targetedImageData, orientation: orientation, options: options, completionHandler: completionHandler)
+      request = Request(targetedImageData: targetedImageData, orientation: orientation, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedImageData: Data, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout A) -> ()) {
+  init(targetedImageData: Data, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedImageData: targetedImageData, options: options, completionHandler: completionHandler)
+      request = Request(targetedImageData: targetedImageData, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedImageURL: URL, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout A) -> ()) {
+  init(targetedImageURL: URL, options: [VNImageOption: Any] = [:], orientation: CGImagePropertyOrientation, _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedImageURL: targetedImageURL, orientation: orientation, options: options, completionHandler: completionHandler)
+      request = Request(targetedImageURL: targetedImageURL, orientation: orientation, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
   
-  init(targetedImageURL: URL, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout A) -> ()) {
+  init(targetedImageURL: URL, options: [VNImageOption: Any] = [:], _ configuration: @escaping (inout Request) -> ()) {
     configure = { request in
       let completionHandler = request.completionHandler
-      request = A(targetedImageURL: targetedImageURL, options: options, completionHandler: completionHandler)
+      request = Request(targetedImageURL: targetedImageURL, options: options, completionHandler: completionHandler)
       configuration(&request)
     }
   }
